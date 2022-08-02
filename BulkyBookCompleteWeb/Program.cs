@@ -28,7 +28,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlSer
 // Package Console -> add-migration AddCategoryToDatabase creates Migrations folder
 
 //** Add hot reload of the page
-//builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 
 var app = builder.Build();
