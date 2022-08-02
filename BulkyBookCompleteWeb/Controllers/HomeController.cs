@@ -12,7 +12,8 @@ namespace BulkyBookCompleteWeb.Controllers
         {
             _logger = logger;
         }
-
+        //** IActionResult is generic type that implements all other returned types.
+        //** IActionResult is appropriate when multiple ActionResult return types are possible in an action.
         public IActionResult Index()
         {
             return View();

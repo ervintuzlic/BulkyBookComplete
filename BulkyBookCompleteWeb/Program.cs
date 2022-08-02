@@ -10,12 +10,25 @@
 
 //** Models -> Tables in database 
 
+using BulkyBookCompleteWeb.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//** When adding options.UseSqlServer install nuget package sqlserver
+builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(
+    //GetConnectionString only default ConnectionString in appsettings
+    //builder.Configuration.GetConnectionString("DefaultConnection") takes DefaultConnection from appsettings and creates it
+    builder.Configuration.GetConnectionString("DefaultConnection")
+    ));
+
+// Package Console -> add-migration AddCategoryToDatabase creates Migrations folder
+
 //** Add hot reload of the page
-builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+//builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 
 var app = builder.Build();
@@ -44,7 +57,7 @@ app.UseAuthorization();
 //** MapControllerRoute that will redirect our request to responding controllers
 app.MapControllerRoute(
     name: "default",
-    //** Default it would go to Home if there's an action it will go to Index
+    //** Default it would go to Home and search for an action Index
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
