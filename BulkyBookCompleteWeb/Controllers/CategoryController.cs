@@ -48,6 +48,7 @@ namespace BulkyBookCompleteWeb.Controllers
                 //** SaveChanges is refreshing the db
                 _db.SaveChanges();
                 //** RedirectToAction it will find Index inside the same controller -> comma if want to specify other controller
+                TempData["success"] = "Category created successfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -107,6 +108,7 @@ namespace BulkyBookCompleteWeb.Controllers
                 //** SaveChanges is refreshing the db
                 _db.SaveChanges();
                 //** RedirectToAction it will find Index inside the same controller -> comma if want to specify other controller
+                TempData["success"] = "Category updated successfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -146,6 +148,7 @@ namespace BulkyBookCompleteWeb.Controllers
 
             _db.Categories.Remove(obj);
             _db.SaveChanges();
+            TempData["success"] = "Category deleted successfully";
             return RedirectToAction("Index");
         }
     }
