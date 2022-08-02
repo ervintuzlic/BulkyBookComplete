@@ -1,4 +1,5 @@
 ﻿//** System.ComponentModel.DataAnnotations; for [Key]
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace BulkyBookCompleteWeb.Models
@@ -13,6 +14,8 @@ namespace BulkyBookCompleteWeb.Models
         [Required]
         public string Name { get; set; }
 
+        [DisplayName("Display Order")]
+        [Range(1,100,ErrorMessage ="Display Order needs to be in range of 1 - 100 only!")]
         public int DisplayOrder { get; set; }
 
         //** Automatically assign DateTime.Now to the new CreatedDateTime

@@ -34,15 +34,119 @@ namespace BulkyBookCompleteWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Category obj)
         {
+            if (obj.Name == obj.DisplayOrder.ToString())
+            {
+                //** ModelState.AddModelError -> Sets custom error message
+                //** For each input it's important to name the attribute where we want our error mesage to show up
+                ModelState.AddModelError("Name", "Display Order cannot be the same as Name");
+            }
+
             //** ModelState.IsValid checks if the model passes all requirements (required, etc)
             if (ModelState.IsValid)
             {
                 _db.Categories.Add(obj);
+                //** SaveChanges is refreshing the db
                 _db.SaveChanges();
                 //** RedirectToAction it will find Index inside the same controller -> comma if want to specify other controller
                 return RedirectToAction("Index");
             }
             return View(obj);
+        }
+
+
+        // GET
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            //** _db.Categories.Single => returns only one element that's found, if there are no elements that are being searched it will throw exception
+            //** _db.Categories.SingleOrDefault => returns only one element every time if there are no elements it will return empty. It will throw exception if there are more than one element. 
+
+            //** _db.Categories.First => If more than 1 elements are found only the first one will be returned
+            //** _db.Categories.FirstOrDefault => If more than 1 elements are found only the first one will be returned
+
+            //** _db.Categories.Find => Tries to find that based on Primary key of the table
+
+            //** Pass expression where we have generic object u that goes to u.Id and if that matches with id it will return the first one.
+            //** var categoryFromDb = _db.Categories.FirstOrDefault(u => u.Id == id);
+
+            //** Pass expression where we have generic object u that goes to u.Id and if that matches with id it will return it.
+            //** var categoryFromDb = _db.Categories.SingleOrDefault(u=>u.Id == id);
+
+            var categoryFromDb = _db.Categories.Find(id);
+
+            if (categoryFromDb == null)
+            {
+                return NotFound();
+            }
+
+            return View(categoryFromDb);
+        }
+
+        // POST
+        [HttpPost]
+        //** ValidateAntiForgeryToken is there to automatically inject a key and it's validated at start so it helps with Forgery attack
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Category obj)
+        {
+            if (obj.Name == obj.DisplayOrder.ToString())
+            {
+                //** ModelState.AddModelError -> Sets custom error message
+                //** For each input it's important to name the attribute where we want our error mesage to show up
+                ModelState.AddModelError("Name", "Display Order cannot be the same as Name");
+            }
+
+            //** ModelState.IsValid checks if the model passes all requirements (required, etc)
+            if (ModelState.IsValid)
+            {
+                //** No need manual update it will take a look at obj find it's primary key retrieve from db see what things change and update db
+                _db.Categories.Update(obj);
+                //** SaveChanges is refreshing the db
+                _db.SaveChanges();
+                //** RedirectToAction it will find Index inside the same controller -> comma if want to specify other controller
+                return RedirectToAction("Index");
+            }
+            return View(obj);
+        }
+
+
+        // GET Remove
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var categoryFromDb = _db.Categories.Find(id);
+
+            if (categoryFromDb == null)
+            {
+                return NotFound();
+            }
+
+            return View(categoryFromDb);
+        }
+
+
+        // POST
+        [HttpPost,ActionName("Delete")]
+        //** ValidateAntiForgeryToken is there to automatically inject a key and it's validated at start so it helps with Forgery attack
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePOST(int? id)
+        {
+            var obj = _db.Categories.Find(id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            _db.Categories.Remove(obj);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
