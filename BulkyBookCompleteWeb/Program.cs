@@ -10,7 +10,7 @@
 
 //** Models -> Tables in database 
 
-using BulkyBookCompleteWeb.Data;
+using BulkyBookComplete.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

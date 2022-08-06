@@ -1,7 +1,7 @@
-﻿using BulkyBookCompleteWeb.Models;
+﻿using BulkyBookComplete.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BulkyBookCompleteWeb.Data
+namespace BulkyBookComplete.DataAccess
 {
     //** Inherit from DbContext and add package Microsoft.EntityFrameworkCore
     public class ApplicationDBContext : DbContext
