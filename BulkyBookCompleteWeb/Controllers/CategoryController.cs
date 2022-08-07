@@ -9,18 +9,18 @@ namespace BulkyBookCompleteWeb.Controllers
     {
 
         //** Create private readonly ApplicationDBContext variable
-        private readonly ICategoryRepository _db;
+        private readonly IUnitOfWork _unitOfWork;
 
         //** Assign db that we got to the _db variable
-        public CategoryController(ICategoryRepository db)
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
             //** Retrieve all Category objects in list from db and assign it to IEnumerable<Category>
-            IEnumerable<Category> objCategoryList = _db.GetAll();
+            IEnumerable<Category> objCategoryList = _unitOfWork.Category.GetAll();
             return View(objCategoryList);
         }
 
@@ -45,9 +45,9 @@ namespace BulkyBookCompleteWeb.Controllers
             //** ModelState.IsValid checks if the model passes all requirements (required, etc)
             if (ModelState.IsValid)
             {
-                _db.Add(obj);
+                _unitOfWork.Category.Add(obj);
                 //** SaveChanges is refreshing the db
-                _db.Save();
+                _unitOfWork.Save();
                 //** RedirectToAction it will find Index inside the same controller -> comma if want to specify other controller
                 TempData["success"] = "Category created successfully";
                 return RedirectToAction("Index");
@@ -73,7 +73,7 @@ namespace BulkyBookCompleteWeb.Controllers
             //** _db.Categories.Find => Tries to find that based on Primary key of the table
 
             //** Pass expression where we have generic object u that goes to u.Id and if that matches with id it will return the first one.
-            var categoryFromDb = _db.GetFirstOrDefault(x => x.Id == id);
+            var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
 
             //** Pass expression where we have generic object u that goes to u.Id and if that matches with id it will return it.
             //** var categoryFromDb = _db.Categories.SingleOrDefault(u=>u.Id == id);
@@ -105,9 +105,9 @@ namespace BulkyBookCompleteWeb.Controllers
             if (ModelState.IsValid)
             {
                 //** No need manual update it will take a look at obj find it's primary key retrieve from db see what things change and update db
-                _db.Update(obj);
+                _unitOfWork.Category.Update(obj);
                 //** SaveChanges is refreshing the db
-                _db.Save();
+                _unitOfWork.Save();
                 //** RedirectToAction it will find Index inside the same controller -> comma if want to specify other controller
                 TempData["success"] = "Category updated successfully";
                 return RedirectToAction("Index");
@@ -126,7 +126,7 @@ namespace BulkyBookCompleteWeb.Controllers
 
             //var categoryFromDb = _db.Categories.Find(id);
 
-            var categoryFromDb = _db.GetFirstOrDefault(u => u.Id == id);
+            var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(u => u.Id == id);
 
             if (categoryFromDb == null)
             {
@@ -143,14 +143,14 @@ namespace BulkyBookCompleteWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePOST(int? id)
         {
-            var obj = _db.GetFirstOrDefault(u => u.Id == id);
+            var obj = _unitOfWork.Category.GetFirstOrDefault(u => u.Id == id);
             if (obj == null)
             {
                 return NotFound();
             }
 
-            _db.Remove(obj);
-            _db.Save();
+            _unitOfWork.Category.Remove(obj);
+            _unitOfWork.Save();
             TempData["success"] = "Category deleted successfully";
             return RedirectToAction("Index");
         }
