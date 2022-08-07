@@ -1,4 +1,5 @@
 ﻿using BulkyBookComplete.DataAccess;
+using BulkyBookComplete.DataAccess.Repository.IRepository;
 using BulkyBookComplete.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +9,10 @@ namespace BulkyBookCompleteWeb.Controllers
     {
 
         //** Create private readonly ApplicationDBContext variable
-        private readonly ApplicationDBContext _db;
+        private readonly ICategoryRepository _db;
 
         //** Assign db that we got to the _db variable
-        public CategoryController(ApplicationDBContext db)
+        public CategoryController(ICategoryRepository db)
         {
             _db = db;
         }
@@ -19,7 +20,7 @@ namespace BulkyBookCompleteWeb.Controllers
         public IActionResult Index()
         {
             //** Retrieve all Category objects in list from db and assign it to IEnumerable<Category>
-            IEnumerable<Category> objCategoryList = _db.Categories;
+            IEnumerable<Category> objCategoryList = _db.GetAll();
             return View(objCategoryList);
         }
 
@@ -44,9 +45,9 @@ namespace BulkyBookCompleteWeb.Controllers
             //** ModelState.IsValid checks if the model passes all requirements (required, etc)
             if (ModelState.IsValid)
             {
-                _db.Categories.Add(obj);
+                _db.Add(obj);
                 //** SaveChanges is refreshing the db
-                _db.SaveChanges();
+                _db.Save();
                 //** RedirectToAction it will find Index inside the same controller -> comma if want to specify other controller
                 TempData["success"] = "Category created successfully";
                 return RedirectToAction("Index");
@@ -72,12 +73,12 @@ namespace BulkyBookCompleteWeb.Controllers
             //** _db.Categories.Find => Tries to find that based on Primary key of the table
 
             //** Pass expression where we have generic object u that goes to u.Id and if that matches with id it will return the first one.
-            //** var categoryFromDb = _db.Categories.FirstOrDefault(u => u.Id == id);
+            var categoryFromDb = _db.GetFirstOrDefault(x => x.Id == id);
 
             //** Pass expression where we have generic object u that goes to u.Id and if that matches with id it will return it.
             //** var categoryFromDb = _db.Categories.SingleOrDefault(u=>u.Id == id);
 
-            var categoryFromDb = _db.Categories.Find(id);
+            //var categoryFromDb = _db.Categories.Find(id);
 
             if (categoryFromDb == null)
             {
@@ -104,9 +105,9 @@ namespace BulkyBookCompleteWeb.Controllers
             if (ModelState.IsValid)
             {
                 //** No need manual update it will take a look at obj find it's primary key retrieve from db see what things change and update db
-                _db.Categories.Update(obj);
+                _db.Update(obj);
                 //** SaveChanges is refreshing the db
-                _db.SaveChanges();
+                _db.Save();
                 //** RedirectToAction it will find Index inside the same controller -> comma if want to specify other controller
                 TempData["success"] = "Category updated successfully";
                 return RedirectToAction("Index");
@@ -123,7 +124,9 @@ namespace BulkyBookCompleteWeb.Controllers
                 return NotFound();
             }
 
-            var categoryFromDb = _db.Categories.Find(id);
+            //var categoryFromDb = _db.Categories.Find(id);
+
+            var categoryFromDb = _db.GetFirstOrDefault(u => u.Id == id);
 
             if (categoryFromDb == null)
             {
@@ -140,14 +143,14 @@ namespace BulkyBookCompleteWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePOST(int? id)
         {
-            var obj = _db.Categories.Find(id);
+            var obj = _db.GetFirstOrDefault(u => u.Id == id);
             if (obj == null)
             {
                 return NotFound();
             }
 
-            _db.Categories.Remove(obj);
-            _db.SaveChanges();
+            _db.Remove(obj);
+            _db.Save();
             TempData["success"] = "Category deleted successfully";
             return RedirectToAction("Index");
         }

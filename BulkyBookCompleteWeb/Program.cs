@@ -11,7 +11,11 @@
 //** Models -> Tables in database 
 
 using BulkyBookComplete.DataAccess;
+using BulkyBookComplete.DataAccess.Repository;
+using BulkyBookComplete.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +28,9 @@ builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlSer
     //builder.Configuration.GetConnectionString("DefaultConnection") takes DefaultConnection from appsettings and creates it
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+
 
 // Package Console -> add-migration AddCategoryToDatabase creates Migrations folder
 

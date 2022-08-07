@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BulkyBookComplete.DataAccess.Repository
 {
-    internal class CategoryRepository : Repository<Category>, ICategoryRepository
+    public class CategoryRepository : Repository<Category>, ICategoryRepository
     {
         private readonly ApplicationDBContext _db;
         public CategoryRepository(ApplicationDBContext db) : base(db)
