@@ -41,5 +41,39 @@ namespace BulkyBookCompleteWeb.Controllers
             TempData["error"] = "Cover Type wasn't created ModelState is invalid!";
             return View(coverType);
         }
+
+        //GET
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+                TempData["error"] = "Cover Type wasn't found!";
+            }
+
+            var coverTypeFromDb = _unitOfWork.CoverType.GetFirstOrDefault(u => u.Id == id);
+
+            if(coverTypeFromDb == null)
+            {
+                return NotFound();
+            }
+
+            return View(coverTypeFromDb);
+
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(CoverType obj) {
+            if (ModelState.IsValid)
+            {
+                _unitOfWork.CoverType.Update(obj);
+                _unitOfWork.Save();
+                TempData["success"] = "Cover Type has been successfully updated!";
+                return RedirectToAction("Index");
+            }
+            return View(obj);
+        }
     }
 }
