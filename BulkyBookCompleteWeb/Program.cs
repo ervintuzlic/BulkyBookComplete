@@ -65,6 +65,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     //** Default it would go to Home and search for an action Index
-    pattern: "{area=Customer}{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
