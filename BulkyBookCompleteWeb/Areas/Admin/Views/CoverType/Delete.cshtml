@@ -1,0 +1,23 @@
+﻿
+<!-- We don't always have what is passed from controller, but we still want to work with Category model so we will use model Category -->
+<!-- However if it's passed from controller it must match what you have inside the model in View -->
+@model CoverType
+
+<form method="post" asp-action="Delete">
+	<input asp-for="Id" hidden />
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<h2 class="text-primary">Delete Cover Type</h2>
+			<hr />
+		</div>
+		<div asp-validation-summary="All"></div>
+		<div class="mb-3">
+			<!-- asp-for displays the name of the property inside our Category model (Name will display in UI) -->
+			<label asp-for="Name"></label>
+			<input asp-for="Name" class="form-control" disabled />
+		</div>
+		<button type="submit" class="btn-danger btn" style="width:150px">Remove</button>
+		<a asp-controller="CoverType" asp-action="Index" class="btn btn-secondary" style="width:150px">Back to List</a>
+	</div>
+</form>
+
