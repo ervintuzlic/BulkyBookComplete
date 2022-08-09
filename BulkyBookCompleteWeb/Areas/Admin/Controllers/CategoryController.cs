@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BulkyBookCompleteWeb.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
 
