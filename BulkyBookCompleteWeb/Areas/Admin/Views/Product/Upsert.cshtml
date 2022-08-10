@@ -55,7 +55,14 @@
 			<input asp-for="Price100" class="form-control" />
 			<span asp-validation-for="Price100" class="text-danger"></span>
 		</div>
-
+		<div class="mb-3">
+			<!-- asp-for displays the name of the property inside our Category model (Name will display in UI) -->
+			<label asp-for="CategoryId"></label>
+			<select asp-for="CategoryId" asp-items="ViewBag.CategoryList" class="form-select">
+				<option disabled selected>--Select Category--</option>
+			</select>
+			<span asp-validation-for="CategoryId" class="text-danger"></span>
+		</div>
 
 		<button type="submit" class="btn-primary btn" style="width:150px">Update</button>
 		<a asp-controller="Product" asp-action="Index" class="btn btn-secondary" style="width:150px">Back to List</a>
