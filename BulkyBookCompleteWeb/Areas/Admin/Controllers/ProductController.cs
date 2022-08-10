@@ -1,6 +1,8 @@
 ﻿using BulkyBookComplete.DataAccess.Repository.IRepository;
 using BulkyBookComplete.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 
 namespace BulkyBookCompleteWeb.Controllers
 {
@@ -24,6 +26,23 @@ namespace BulkyBookCompleteWeb.Controllers
         public IActionResult Upsert(int? id)
         {
             Product product = new();
+
+            // ** Projections using Select
+            IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(
+                u=>new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString(),
+                }
+            );
+
+            IEnumerable<SelectListItem> CoverTypeList = _unitOfWork.CoverType.GetAll().Select(
+                u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString(),
+                }
+            );
 
             if (id == null || id == 0)
             {
