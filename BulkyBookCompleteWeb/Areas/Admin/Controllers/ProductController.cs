@@ -21,51 +21,30 @@ namespace BulkyBookCompleteWeb.Controllers
         }
 
         //GET
-        public IActionResult Create()
+        public IActionResult Upsert(int? id)
         {
-            return View();
-        }
+            Product product = new();
 
-        //POST 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Product Product)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Add(Product);
-                _unitOfWork.Save();
-                TempData["success"] = "Cover Type created successfully!";
-                return RedirectToAction("Index");
-            }
-            TempData["error"] = "Cover Type wasn't created ModelState is invalid!";
-            return View(Product);
-        }
-
-        //GET
-        public IActionResult Edit(int? id)
-        {
             if (id == null || id == 0)
             {
-                return NotFound();
-                TempData["error"] = "Cover Type wasn't found!";
+                // create product
+                return View(product);
+
             }
 
-            var ProductFromDb = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
-
-            if(ProductFromDb == null)
+            else
             {
-                return NotFound();
+                // update product
             }
 
-            return View(ProductFromDb);
+            return View(product);
 
         }
 
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Product obj) {
+        public IActionResult Upsert(Product obj) {
             if (ModelState.IsValid)
             {
                 _unitOfWork.Product.Update(obj);
