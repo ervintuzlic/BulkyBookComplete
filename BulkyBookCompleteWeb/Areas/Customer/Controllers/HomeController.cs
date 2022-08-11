@@ -1,4 +1,5 @@
-﻿using BulkyBookComplete.Models;
+﻿using BulkyBookComplete.DataAccess.Repository.IRepository;
+using BulkyBookComplete.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -8,16 +9,20 @@ namespace BulkyBookCompleteWeb.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IUnitOfWork _unitOfWork;
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
         //** IActionResult is generic type that implements all other returned types.
         //** IActionResult is appropriate when multiple ActionResult return types are possible in an action.
         public IActionResult Index()
         {
-            return View();
+            IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category,CoverType");
+
+
+            return View(productList);
         }
 
         public IActionResult Privacy()
