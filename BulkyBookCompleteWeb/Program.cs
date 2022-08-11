@@ -65,6 +65,8 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.MapRazorPages();
+
 //** MapControllerRoute that will redirect our request to responding controllers
 app.MapControllerRoute(
     name: "default",
