@@ -15,7 +15,6 @@ using BulkyBookComplete.DataAccess.Repository;
 using BulkyBookComplete.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,9 +28,6 @@ builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlSer
     //builder.Configuration.GetConnectionString("DefaultConnection") takes DefaultConnection from appsettings and creates it
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDBContext>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
