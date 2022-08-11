@@ -20,8 +20,7 @@ namespace BulkyBookCompleteWeb.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Product> ProductList = _unitOfWork.Product.GetAll();
-            return View(ProductList);
+            return View();
         }
 
         //GET
@@ -126,5 +125,13 @@ namespace BulkyBookCompleteWeb.Controllers
             return RedirectToAction("Index");
 
         }
+        #region API CALLS
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var productList = _unitOfWork.Product.GetAll(includeProperties:"Category,CoverType");
+            return Json(new { data = productList });
+        }
+        #endregion
     }
 }
